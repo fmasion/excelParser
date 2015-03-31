@@ -1,7 +1,7 @@
 package me.masion.excelParser.parser
 
 import minitest.SimpleTestSuite
-import scala.util.Success
+import scala.util.{Failure, Success}
 import me.masion.excelParser.models.Numeric
 
 /**
@@ -12,32 +12,31 @@ object NumericTestSuite extends SimpleTestSuite {
   val DECIMAL_SEP = "."
 
   test("Integer : 57") {
-    val parser = new Tester("57") with NumericParser
-    //parser.Number.run().map(s=> println(""+s))
-    assert(parser.Number.run() == Success(Numeric(57)))
+    val parser = new FormulaParser("57")
+//    parser.InputLine.run() match {
+//      case Success(s) => println("HELLO"+s)
+//      case Failure(f) => println(""+f )
+//    }
+    assert(parser.InputLine.run() == Success(Numeric(57)))
   }
 
   test("Double 5.432") {
-    val parser = new Tester("5"+DECIMAL_SEP+"432") with NumericParser
-    //parser.Numeric.run().map(s=> println(""+s))
-    assert(parser.Number.run() == Success(Numeric(5.432)))
+    val parser = new FormulaParser("5"+DECIMAL_SEP+"432")
+    assert(parser.InputLine.run() == Success(Numeric(5.432)))
   }
 
   test("Scientific 5.432e2") {
-    val parser = new Tester("5"+DECIMAL_SEP+"432e2") with NumericParser
-    //parser.Number.run().map(s=> println(""+s))
-    assert(parser.Number.run() == Success(Numeric("5.432e2".toDouble)))
+    val parser = new FormulaParser("5"+DECIMAL_SEP+"432e2")
+    assert(parser.InputLine.run() == Success(Numeric("5.432e2".toDouble)))
   }
 
   test("Positive Signed +5.432e2") {
-    val parser = new Tester(" +5"+DECIMAL_SEP+"432e+2" ) with NumericParser
-    //parser.Number.run().map(s=> println(""+s))
-    assert(parser.Number.run() == Success(Numeric("5.432e2".toDouble)))
+    val parser = new FormulaParser(" +5"+DECIMAL_SEP+"432e+2" )
+    assert(parser.InputLine.run() == Success(Numeric("5.432e2".toDouble)))
   }
 
   test("Negative Signed -5.432e2") {
-    val parser = new Tester(" -5"+DECIMAL_SEP+"432e-2 ") with NumericParser
-    //parser.Number.run().map(s=> println(""+s))
-    assert(parser.Number.run() == Success(Numeric("-5.432e-2".toDouble)))
+    val parser = new FormulaParser(" -5"+DECIMAL_SEP+"432e-2 ")
+    assert(parser.InputLine.run() == Success(Numeric("-5.432e-2".toDouble)))
   }
 }
