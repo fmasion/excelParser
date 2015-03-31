@@ -1,6 +1,6 @@
 package me.masion.excelParser.parser
 
-import org.parboiled2.{Rule0, Parser}
+import org.parboiled2.{Parser, Rule0}
 
 /**
  * Created by F. Masion on 25/03/15.

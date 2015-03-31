@@ -2,7 +2,7 @@ package me.masion.excelParser.parser
 
 import me.masion.excelParser.models.ast.ASTNode
 import me.masion.excelParser.models.functionast._
-import me.masion.excelParser.models.{Primitive, Str, Bool}
+import me.masion.excelParser.models.{Bool, Primitive}
 import org.parboiled2._
 
 /**

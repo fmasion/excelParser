@@ -1,10 +1,10 @@
 package me.masion.excelParser.parser
 
 import me.masion.excelParser._
-import me.masion.excelParser.models.{Primitive, Str, Dat}
+import me.masion.excelParser.models.Dat
 import me.masion.excelParser.models.utils.DateTime
 import org.parboiled2.CharPredicate._
-import org.parboiled2.{Rule0, Rule, Parser, Rule1}
+import org.parboiled2.{Parser, Rule0, Rule1}
 
 import scala.util.Try
 

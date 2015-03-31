@@ -2,8 +2,6 @@ package me.masion.excelParser.models.cellsReferences
 
 import me.masion.excelParser.models.ast.ASTNode
 
-import scala.collection.immutable.{Iterable, IndexedSeq}
-
 /**
  * Created by fred on 27/03/15.
  */

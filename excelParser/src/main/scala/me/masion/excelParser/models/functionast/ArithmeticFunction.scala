@@ -1,6 +1,5 @@
 package me.masion.excelParser.models.functionast
 
-import me.masion.excelParser.models.Bool
 import me.masion.excelParser.models.ast.ASTNode
 
 /**

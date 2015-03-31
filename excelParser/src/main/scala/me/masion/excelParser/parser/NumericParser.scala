@@ -1,8 +1,8 @@
 package me.masion.excelParser.parser
 
-import org.parboiled2.CharPredicate._
 import me.masion.excelParser.models.Numeric
-import org.parboiled2.{Rule1, Parser}
+import org.parboiled2.CharPredicate._
+import org.parboiled2.{Parser, Rule1}
 
 /**
  * Created by F. Masion on 25/03/15.
