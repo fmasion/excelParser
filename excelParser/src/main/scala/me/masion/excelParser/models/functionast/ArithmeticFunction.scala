@@ -8,14 +8,14 @@ import me.masion.excelParser.models.ast.ASTNode
 trait ArithmeticFunction extends ASTNode
 case class Add(lhs:ASTNode, rhs:ASTNode) extends ArithmeticFunction
 case class Substract(lhs:ASTNode, rhs:ASTNode) extends ArithmeticFunction
-case class Mulitiply(lhs:ASTNode, rhs:ASTNode) extends ArithmeticFunction
+case class Multiply(lhs:ASTNode, rhs:ASTNode) extends ArithmeticFunction
 case class Divide(lhs:ASTNode, rhs:ASTNode) extends ArithmeticFunction
 case class Exponant(lhs:ASTNode, rhs:ASTNode) extends ArithmeticFunction
 case class Modulo(lhs:ASTNode, rhs:ASTNode) extends ArithmeticFunction
 
 object ArithmeticFunction{
   def from(lhs:ASTNode, op:String, rhs:ASTNode):ASTNode = op match {
-    case "*"  => Mulitiply(lhs, rhs)
+    case "*"  => Multiply(lhs, rhs)
     case "/"  => Divide(lhs, rhs)
     case "^" => Exponant(lhs, rhs)
     case "+" => Add(lhs, rhs)

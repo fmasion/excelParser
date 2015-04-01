@@ -47,7 +47,7 @@ class FormulaParser(val input: ParserInput) extends Parser with CellsParser with
   def TermOperator = rule { OptionalSpaces ~ anyOf("+-") ~ OptionalSpaces }
 
   def ArithmeticExpression = rule {
-    Term ~ zeroOrMore(
+    "=" ~ OptionalSpaces ~ Term ~ zeroOrMore(
       capture(TermOperator) ~ Term ~> ((lhs:ASTNode, op, rhs:ASTNode) => ArithmeticFunction.from(lhs, op.trim,rhs)))
   }
   def Term = rule {
