@@ -8,7 +8,7 @@ import me.masion.excelParser.models.ast.ASTNode
 
 
 sealed trait CellAreaRef
-case class CellRef(x:Long, y:Long, fixedX:Boolean=false, fixedY:Boolean=false) extends CellAreaRef with ASTNode
+case class CellRef(col:Long, row:Long, fixedX:Boolean=false, fixedY:Boolean=false) extends CellAreaRef with ASTNode
 case class SingleCellRef(cellRef: CellRef) extends CellAreaRef
 case class CellRangeRef(startRef: CellRef, endRef: CellRef) extends CellAreaRef
 case class CellIntersectionRef(cellAreas:Seq[CellAreaRef]) extends CellAreaRef
@@ -35,8 +35,8 @@ object CellRangeRef{
    * @return a well ordered CellRangeRef
    */
   def from(startCellRef: CellRef, endCellRef: CellRef) = {
-    val (sr,er) = (startCellRef.x, endCellRef.x)
-    val (sc,ec) = (startCellRef.y, endCellRef.y)
+    val (sr,er) = (startCellRef.col, endCellRef.col)
+    val (sc,ec) = (startCellRef.row, endCellRef.row)
     CellRangeRef(CellRef(Math.min(sr,er),Math.min(sc,ec)), CellRef(Math.max(sr,er),Math.max(sc,ec)))
   }
 }
