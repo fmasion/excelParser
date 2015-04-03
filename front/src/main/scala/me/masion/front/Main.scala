@@ -1,5 +1,7 @@
 package me.masion.front
 
+import org.scalajs.dom
+
 import scalatags.JsDom.all._
 import rx._
 import scalatags.rx.all._

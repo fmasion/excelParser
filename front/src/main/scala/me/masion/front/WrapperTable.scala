@@ -8,7 +8,7 @@ import scalatags.JsDom.all._
 trait WrapperTable {
 
     def wrapperTable = {
-      div(cls:="wrapper-table")(
+      div(id:="wrapper-table", cls:="wrapper-table")(
         div(id:="table")
       )
 

@@ -1,23 +1,20 @@
-package me.masion.excelParser.models.spreadsheet
+package me.masion.front.model.spreadsheet
 
-import me.masion.excelParser.models.{ParseException, InvalidFormula, Str, EmptyPrimitive}
 import me.masion.excelParser.models.cellsReferences.CellRef
+import me.masion.excelParser.models.{InvalidFormula, ParseException, Str}
 import me.masion.excelParser.parser.FormulaParser
 import org.parboiled2.ParseError
+import rx._
 
 import scala.util.{Failure, Success}
 
 /**
  * Created by fred on 02/04/15.
  */
-case class Sheet(internalGrid: Map[CellRef, Cell]= Map.empty, internalLines: Map[Int, Line]= Map.empty, internalcolumn: Map[Int, Column]= Map.empty) {
+case class Sheet(internalGrid: Var[Map[CellRef, Cell]]= Var(Map.empty), internalLines: Var[Map[Int, Line]]= Var(Map.empty), internalColumn: Var[Map[Int, Column]]= Var(Map.empty)) {
 
 
-
-  def lineCells(row:Int) = internalGrid.filter(entry => entry._1.row == row).map(_._2)
-  def columnCells(col:Int) = internalGrid.filter(entry => entry._1.col == col).map(_._2)
-
-  def grid(cellRef: CellRef) = internalGrid.getOrElse(cellRef, EmptyCell)
+  def grid(cellRef: CellRef) = Rx {internalGrid().getOrElse(cellRef, EmptyCell)}
 
   def update(cellRef:CellRef, input:String) = {
     val parser = new FormulaParser(input)
@@ -31,7 +28,7 @@ case class Sheet(internalGrid: Map[CellRef, Cell]= Map.empty, internalLines: Map
         Cell(input, Str(input), ParseException(b.getMessage) )
       }
     }
-    internalGrid + (cellRef -> cell)
+    internalGrid() = internalGrid() + (cellRef -> cell)
   }
 
 }
