@@ -1,0 +1,173 @@
+html, body{
+    height: 100%;
+}
+/* header class */
+.header{
+    width: 100%;
+    height: 120px;
+    position: fixed;
+    top: 0;
+}
+
+.main-header{
+    width: 100%;
+    height: 60px;
+    border-bottom: 1px solid #e7e7e7;
+}
+
+.title-doc{
+    max-height: 20px;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 14px;
+    padding: 8px 0 0 50px;
+}
+
+.btn-github{
+    margin: 12px 12px 0 0;
+    background-color: #f2f2f2;
+    color: #333;
+    border: 1px solid #e7e7e7;
+}
+.icon-github{
+    padding-right: 7px;
+    vertical-align: inherit;
+}
+
+.left-nav{
+    width: 40px;
+    height: 59px;
+    float: left;
+    background-color: #7ac9ed;
+}
+
+i.logicon{
+    width: 30px;
+    height: 30px;
+    margin: 13px 5px;
+    display: block;
+    background-image: url('../img/scala.png');
+    background-repeat: no-repeat;
+}
+
+.main-menu{
+    width: 100%;
+    height: 29px;
+}
+
+ul.list-nav{
+    width: 100%;
+    font-size: 12px;
+    list-style: none;
+}
+
+ul.list-nav li{
+    float: left;
+    margin-right: 1px;
+}
+
+ul.list-nav li a{
+    padding: 6px 10px;
+    display: block;
+    color: #333333;
+}
+
+ul.list-nav li a:hover{
+    background-color: #f2f2f2;
+    text-decoration: none;
+}
+
+.icon-nav{
+    width: 100%;
+    height: 36px;
+    border-bottom: 1px solid #e7e7e7;
+    background-color: #f2f2f2;
+}
+
+ul.list-icon{
+    width: 100%;
+    height: 36px;
+    font-size: 12px;
+    list-style: none;
+}
+
+ul.list-icon li{
+    float: left;
+    padding: 4px 1px 3px;
+    margin-right: 1px;
+    text-align: center;
+}
+
+ul.list-icon li:first-child{
+    margin-left: 10px;
+}
+
+ul.list-icon i{
+    width: 26px;
+    height: 26px;
+    font-size: 14px;
+    display: inline-block;
+    padding-top: 6px;
+    color: #333;
+}
+
+ul.list-icon li.separator{
+    width: 1px;
+    height: 36px;
+    background-color: #e7e7e7;
+    border: none;
+    margin: 0 3px;
+    padding: 0;
+}
+
+ul.list-icon li a{
+    width: 28px;
+    height: 28px;
+    display: block;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+ul.list-icon li a:hover{
+    border-color: #e7e7e7;
+}
+
+.function-bar{
+    width: 100%;
+    height: 24px;
+    border-bottom: 1px solid #e7e7e7;
+    background-image: url('../img/fx.png');
+    background-repeat: no-repeat;
+    background-position: left center;
+}
+
+.function-bar input[type="text"] {
+    color: #666;
+    width: 100%;
+    border: none;
+    font-size: 12px;
+    outline: none;
+    padding-left: 30px;
+    background-color: transparent;
+    vertical-align: baseline;
+    padding: 4px 0 0 30px;
+}
+
+/* now the fun */
+.wrapper-table{
+    width: 100%;
+    position: fixed;
+    top: 120px;
+    overflow: scroll;
+}
+
+/* // end now the fun **/
+
+/* //end header class */
+.footer{
+    width: 100%;
+    height: 36px;
+    position: fixed;
+    bottom: 0;
+    border-top: 1px solid #e7e7e7;
+}
