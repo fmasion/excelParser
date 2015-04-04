@@ -15,8 +15,12 @@ case class Sheet(internalGrid: Var[Map[CellRef, Cell]]= Var(Map.empty), internal
 
 
   def grid(cellRef: CellRef) = Rx {internalGrid().getOrElse(cellRef, EmptyCell)}
-  def row(i: Int) = Rx {internalRows().getOrElse(i, EmptyCell)}
-  def column(i: Int) = Rx {internalColumns().getOrElse(i, EmptyCell)}
+  def row(i: Int) = internalRows().getOrElse(i, Row.default)
+  def column(i: Int) = internalColumns().getOrElse(i, Column.default)
+
+  def rowTop(pos:Int) = Iterator.from(1).map( i => row(i) ).filterNot(_.hidden).take(pos).map(_.height).sum
+  def colLeft(pos:Int) = Iterator.from(1).map( i => column(i) ).filterNot(_.hidden).take(pos).map(_.width).sum
+
 
   def update(cellRef:CellRef, input:String) = {
     val parser = new FormulaParser(input)
@@ -34,5 +38,3 @@ case class Sheet(internalGrid: Var[Map[CellRef, Cell]]= Var(Map.empty), internal
   }
 
 }
-
-

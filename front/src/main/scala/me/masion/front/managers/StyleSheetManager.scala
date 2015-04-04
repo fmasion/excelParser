@@ -30,8 +30,13 @@ trait StyleSheetManager {
   }
 
   val rowStyleSheetUpdater = Obs(GlobalSheetState.rowDisplayRange) {
-    val newStyles: List[String] =  GlobalSheetState.rowDisplayRange().toList.map{ i =>
-      getRowRule(GlobalSheetState.currentSheet().internalRows().getOrElse(i, Row.default), i)
+
+    val range = GlobalSheetState.rowDisplayRange().toList
+    val rows = GlobalSheetState.currentSheet().internalRows()
+    val offset = range.head -1
+
+    val newStyles: List[String] =  range.map{ pos =>
+      getRowRule(rows.getOrElse(pos, Row.default), pos, offset)
     }
     //Add new styles
     newStyles.diff(currentRowStyles).map{ rule =>
@@ -41,8 +46,12 @@ trait StyleSheetManager {
   }
 
   val colStyleSheetUpdater = Obs(GlobalSheetState.colDisplayRange) {
-    val newStyles: List[String] =  GlobalSheetState.colDisplayRange().toList.map{ i =>
-      getColumRule(GlobalSheetState.currentSheet().internalColumns().getOrElse(i, Column.default), i)
+    val range = GlobalSheetState.colDisplayRange().toList
+    val cols = GlobalSheetState.currentSheet().internalColumns()
+    val offset = range.head -1
+
+    val newStyles: List[String] =  range.map{ pos =>
+      getColumRule(cols.getOrElse(pos, Column.default), pos, offset)
     }
     //Add new styles
     newStyles.diff(currentColStyles).map{ rule =>
@@ -52,13 +61,25 @@ trait StyleSheetManager {
   }
 
 
-  def getRowRule(row: Row, i:Int):String = {
-    s".table .row${i} { }"
+  def getRowRule(row: Row, pos:Int, offset:Int):String = {
+
+    var rules= Map.empty[String,String]
+    rules = if(row.hidden){ rules + ("display" -> "none")} else rules
+    rules = rules + ("height" -> s"${row.height}px")
+    rules = rules + ("top" -> s"${GlobalSheetState.currentSheet().rowTop(pos)}px")
+
+    s".table .row${pos - offset} { ${rules.map{case (key, value) => s"${key}: ${value};" }.mkString(" ")} ${row.styles.mkString("; ")} }"
   }
 
 
-  def getColumRule(column: Column, i:Int):String = {
-    s".table .column${i} { }"
+  def getColumRule(column: Column, pos:Int, offset:Int):String = {
+
+    var rules= Map.empty[String,String]
+    rules = if(column.hidden){ rules + ("display" -> "none")} else rules
+    rules = rules + ("width" -> s"${column.width}px")
+    rules = rules + ("left" -> s"${GlobalSheetState.currentSheet().colLeft(pos)}px")
+
+    s".table .column${pos - offset} { ${rules.map{case (key, value) => s"${key}: ${value};" }.mkString(" ")} ${column.styles.mkString("; ")} }"
   }
 
 
