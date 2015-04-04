@@ -11,10 +11,12 @@ import scala.util.{Failure, Success}
 /**
  * Created by fred on 02/04/15.
  */
-case class Sheet(internalGrid: Var[Map[CellRef, Cell]]= Var(Map.empty), internalLines: Var[Map[Int, Line]]= Var(Map.empty), internalColumn: Var[Map[Int, Column]]= Var(Map.empty)) {
+case class Sheet(internalGrid: Var[Map[CellRef, Cell]]= Var(Map.empty), internalRows: Var[Map[Int, Row]]= Var(Map.empty), internalColumns: Var[Map[Int, Column]]= Var(Map.empty)) {
 
 
   def grid(cellRef: CellRef) = Rx {internalGrid().getOrElse(cellRef, EmptyCell)}
+  def row(i: Int) = Rx {internalRows().getOrElse(i, EmptyCell)}
+  def column(i: Int) = Rx {internalColumns().getOrElse(i, EmptyCell)}
 
   def update(cellRef:CellRef, input:String) = {
     val parser = new FormulaParser(input)

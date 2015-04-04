@@ -1,4 +1,4 @@
-package me.masion.front
+package me.masion.front.partials
 
 import scalatags.JsDom.all._
 

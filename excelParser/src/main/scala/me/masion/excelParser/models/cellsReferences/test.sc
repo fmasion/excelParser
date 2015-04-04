@@ -36,3 +36,13 @@ ColumnRangeRef.from("A", "BB")
 
 
 Math.max("27".toLong, "1".toLong)
+
+
+val a = (1 to 6).toList
+val b = (3 to 9).toList
+
+val n = b.diff(a)
+
+a ::: n
+
+n.zipWithIndex
