@@ -1,6 +1,6 @@
 package me.masion.front
 
-import me.masion.front.managers.{StyleSheetManager, ResizeManager, DisplayManager}
+import me.masion.front.managers.{ScrollManager, StyleSheetManager, ResizeManager, DisplayManager}
 import me.masion.front.model.spreadsheet.Sheet
 import me.masion.front.model.{Point, GlobalSheetState}
 import org.scalajs.dom._
@@ -15,7 +15,7 @@ import rx._
 /**
  * Created by fred on 02/04/15.
  */
-object SpreadSheet extends js.JSApp with DisplayManager with ResizeManager with StyleSheetManager {
+object SpreadSheet extends js.JSApp with DisplayManager with ResizeManager with StyleSheetManager with ScrollManager {
 
   def main(): Unit = {
     initModel
