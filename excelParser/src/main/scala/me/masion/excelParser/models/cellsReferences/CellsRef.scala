@@ -8,7 +8,7 @@ import me.masion.excelParser.models.ast.ASTNode
 
 
 sealed trait CellAreaRef
-case class CellRef(col:Long, row:Long, fixedX:Boolean=false, fixedY:Boolean=false) extends CellAreaRef with ASTNode
+case class CellRef(col:Long, row:Long, dollarX:Boolean=false, dollarY:Boolean=false) extends CellAreaRef with ASTNode
 case class SingleCellRef(cellRef: CellRef) extends CellAreaRef
 case class CellRangeRef(startRef: CellRef, endRef: CellRef) extends CellAreaRef
 case class CellIntersectionRef(cellAreas:Seq[CellAreaRef]) extends CellAreaRef

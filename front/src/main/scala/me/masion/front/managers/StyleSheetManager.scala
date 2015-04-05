@@ -68,7 +68,7 @@ trait StyleSheetManager {
     rules = rules + ("height" -> s"${row.height}px")
     rules = rules + ("top" -> s"${GlobalSheetState.currentSheet().rowTop(pos)}px")
 
-    s".table .row${pos - offset} { ${rules.map{case (key, value) => s"${key}: ${value};" }.mkString(" ")} ${row.styles.mkString("; ")} }"
+    s"#table .row${pos - offset} { ${rules.map{case (key, value) => s"${key}: ${value};" }.mkString(" ")} ${row.styles.mkString("; ")} }"
   }
 
 
@@ -79,7 +79,7 @@ trait StyleSheetManager {
     rules = rules + ("width" -> s"${column.width}px")
     rules = rules + ("left" -> s"${GlobalSheetState.currentSheet().colLeft(pos)}px")
 
-    s".table .column${pos - offset} { ${rules.map{case (key, value) => s"${key}: ${value};" }.mkString(" ")} ${column.styles.mkString("; ")} }"
+    s"#table .column${pos - offset} { ${rules.map{case (key, value) => s"${key}: ${value};" }.mkString(" ")} ${column.styles.mkString("; ")} }"
   }
 
 

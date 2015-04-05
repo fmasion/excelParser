@@ -23,7 +23,6 @@ object SpreadSheet extends js.JSApp with DisplayManager with ResizeManager with 
 
   }
 
-
   def initModel() = {
     GlobalSheetState.currentSheet() = Sheet()
   }

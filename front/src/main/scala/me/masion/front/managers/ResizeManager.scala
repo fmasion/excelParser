@@ -13,17 +13,17 @@ trait ResizeManager {
   val doc = jQuery(dom.document)
 
   jQuery(dom.window).ready{ () => {
-    GlobalSheetState.documentSize() = Point(doc.height(), doc.width())
+    GlobalSheetState.documentSize() = Point(doc.width(),doc.height() )
   }}
 
   jQuery(dom.window).resize{ () => {
-    GlobalSheetState.documentSize() = Point(doc.height(), doc.width())
+    GlobalSheetState.documentSize() = Point(doc.width(),doc.height())
   }}
 
   val Resizer = Obs(GlobalSheetState.documentSize){
     val headerElem = jQuery(".header")
     val footerElem = jQuery(".footer")
-    val newHeight = s"${GlobalSheetState.documentSize().height - headerElem.height() - footerElem.height()}px"
+    val newHeight = s"${GlobalSheetState.documentSize().y - headerElem.height() - footerElem.height()}px"
     jQuery(".wrapper-table").css("height", newHeight)
   }
 

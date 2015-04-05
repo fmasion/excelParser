@@ -1,16 +1,18 @@
-.table{
+#table{
     position: relative;
-}
-
-.table .cell{
 
 }
 
-.table .column{
+#table .cell{
+    position: absolute;
+    border: 1px solid #e7e7e7;
+}
+
+#table .column{
 
 }
 
-.table .row{
+#table .row{
 
 }
 

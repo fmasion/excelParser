@@ -13,14 +13,14 @@ import scala.util.{Failure, Success}
  * Created by fred on 02/04/15.
  */
 case class Sheet(internalGrid: Var[Map[CellRef, Cell]]= Var(Map.empty), internalRows: Var[Map[Int, Row]]= Var(Map.empty), internalColumns: Var[Map[Int, Column]]= Var(Map.empty)) {
-  
-  def grid(cellRef: CellRef) = Rx {internalGrid().getOrElse(cellRef, EmptyCell)}
+
+  def grid(cellRef: CellRef) = internalGrid().getOrElse(cellRef, EmptyCell)
   def row(i: Int) = internalRows().getOrElse(i, Row.default)
   def column(i: Int) = internalColumns().getOrElse(i, Column.default)
 
   //Give the top or left posistion of a row/column based on precedant row/column size and visibility
-  def rowTop(pos:Int) = Iterator.from(1).map( i => row(i) ).filterNot(_.hidden).take(pos).map(_.height).sum
-  def colLeft(pos:Int) = Iterator.from(1).map( i => column(i) ).filterNot(_.hidden).take(pos).map(_.width).sum
+  def rowTop(pos:Int) = Iterator.from(1).map( i => row(i) ).filterNot(_.hidden).take(pos -1).map(_.height).sum
+  def colLeft(pos:Int) = Iterator.from(1).map( i => column(i) ).filterNot(_.hidden).take(pos -1).map(_.width).sum
 
   //Give column or row number based on the srollPosition
   def rowNum(scrollPos:Int) = {

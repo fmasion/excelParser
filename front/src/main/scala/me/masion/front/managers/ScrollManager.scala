@@ -10,10 +10,8 @@ import rx._
   */
 trait ScrollManager {
 
-
- jQuery(dom.window).ready{ () => {
+ val scroll = jQuery(dom.window).ready{ () => {
    val elem = jQuery("#wrapper-table")
-  println("" + elem)
    elem.scroll{ () =>
     val topScroll = elem.scrollTop()
     val leftScroll = elem.scrollLeft()
@@ -24,20 +22,4 @@ trait ScrollManager {
  }}
 
 
-
-
-
-//
-//  jQuery(dom.window).resize{ () => {
-//    documentSize() = Point(doc.height(), doc.width())
-//  }}
-//
-//  val Resizer = Obs(documentSize){
-//    val headerHeight = jQuery(".header").height()
-//    val footerHeight = jQuery(".footer").height()
-//
-//    var newHeight = s"${documentSize().height - headerHeight - footerHeight}px"
-//    jQuery(".wrapper-table").css("height", newHeight)
-//  }
-
- }
+}

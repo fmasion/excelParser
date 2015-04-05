@@ -1,6 +1,8 @@
 package me.masion.front.partials
 
 import scalatags.JsDom.all._
+import rx._
+import scalatags.rx.all._
 
 /**
  * Created by fred on 02/04/15.
