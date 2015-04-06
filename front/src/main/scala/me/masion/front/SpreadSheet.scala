@@ -20,11 +20,13 @@ object SpreadSheet extends js.JSApp with DisplayManager with ResizeManager with 
   def main(): Unit = {
     initModel
     dom.document.body.appendChild(mainPage.render)
-
+    updateContainerContant
   }
 
   def initModel() = {
     GlobalSheetState.currentSheet() = Sheet()
   }
+
+
 
 }

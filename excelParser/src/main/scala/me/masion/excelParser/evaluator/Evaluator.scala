@@ -27,10 +27,11 @@ trait Evaluator extends CellProvider {
 
     ast match {
       case p:Primitive          => p
-      case c : CellRef          => this.cellRefToCell(c:CellRef).value() match{
-        case Right(p)   => p
-        case Left(e)    => throw new EvaluationException(e.msg)
+      case c : CellRef          => this.cellRefToCell(c:CellRef).map{ c => c.value() match {
+        case Right(p) => p
+        case Left(e) => throw new EvaluationException(e.msg)
       }
+      }.getOrElse(Str(""))
 
       // Arithmetic
       case Multiply(lhs, rhs)   => Numeric(runEvaluate(lhs).toDouble * runEvaluate(rhs).toDouble)

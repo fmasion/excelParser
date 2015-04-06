@@ -1,14 +1,13 @@
 package me.masion.front.partials.table
 
+import me.masion.excelParser.models.{Primitive, EvaluationError}
 import me.masion.front.model.{Point, GlobalSheetState}
-import org.scalajs.dom
-import org.scalajs.dom.MouseEvent
 import org.scalajs.dom.html.Div
 
+import scala.collection.immutable.IndexedSeq
 import scalatags.JsDom.TypedTag
 import scalatags.JsDom.all._
-import rx._
-import scalatags.rx.all._
+import org.scalajs.jquery._
 
 /**
  * Created by fred on 03/04/15.
@@ -20,34 +19,35 @@ trait Table {
     //overlay
   )
 
-  def container = div(cls:="container")(
-    for{
+  def container = div(id:= "container", cls:="container")()
+
+  def updateContainerContant = {
+    jQuery("#container").empty()
+    val newContent = for{
       row <- GlobalSheetState.rowDisplayRange()
       col <- GlobalSheetState.colDisplayRange()
     } yield{
-      div(cls:=s"cell row${row} column${col} ",
+      val thisCellRef = GlobalSheetState.pointToCellRef(Point(col, row))
+      val isSelected = GlobalSheetState.currentCellRef() == thisCellRef
+      val oCell: Option[Either[EvaluationError, Primitive]] = GlobalSheetState.pointToCell(Point(col, row)).map(_.value())
+      div(cls:=s"cell row${row} column${col} ${if(isSelected) "selectedCell"}",
         onclick:=GlobalSheetState.cellClick(col,row) _ ,
         ondblclick:=GlobalSheetState.cellDblClick(col,row) _ )(
-        Rx{ val cell = GlobalSheetState.pointToCell(Point(col, row))
-          cell.value() match{
-            case Right(p) => p.toString
-            case Left(e) => "#VALEUR!"
+          oCell match{
+            case Some(Right(p)) => p.toString
+            case Some(Left(e))  => "#VALEUR!"
+            case None           => ""
           }
-        }
-      )
-    }
+        )
+    }.render
+
+    jQuery("#container").append(newContent.toArray:_*)
+
+  }
+
+
+  def inputHolder() = div(cls:="InputHolder", style:="display: none")(
+    textarea(cls:="handsontableInput", style:="width: 41px; height: 23px; font-size: 14px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; resize: none; min-width: 41px; max-width: 1642px; overflow-y: hidden;")
   )
-
-  //def overlay = div(cls:="overlay", onclick:=GlobalSheetState.overlayClick _ )
-
-//  def inputHolder = div(cls:="handsontableInputHolder", style:="display: none")(
-//    textarea(cls:="handsontableInput", style:="width: 41px; height: 23px; font-size: 14px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; resize: none; min-width: 41px; max-width: 1642px; overflow-y: hidden;")
-//  )
-
-//  def colResizerGuide = div(cls:="manualColumnResizer", style:="top: 120px; left: 228px;")
-//
-//  def colResizer = div(cls:="manualColumnResizerGuide", style:="top: 120px; left: 128px; height: 640px;" )
-//
-
 
 }

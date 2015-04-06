@@ -7,7 +7,7 @@ import me.masion.excelParser.models.cellsReferences.{CellAreaRef, CellRef}
  */
 trait CellProvider {
 
-  def cellRefToCell(cellRef:CellRef):CellApi
+  def cellRefToCell(cellRef:CellRef):Option[CellApi]
 
   def cellAreaToCells(cellAreaRef: CellAreaRef):Seq[CellApi]
 

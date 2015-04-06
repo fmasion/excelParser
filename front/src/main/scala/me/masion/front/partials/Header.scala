@@ -62,7 +62,13 @@ trait Header {
       ),
       div(cls:="function-bar")(
         span(cls:="icon-function"),
-        input(`type`:="text")
+        input(`type`:="text"){
+//          Rx {
+//            val currentCell = GlobalSheetState.currentCell()
+//            println(currentCell)
+//            ""+currentCell.input()
+//          }
+        }
       )
     )
 

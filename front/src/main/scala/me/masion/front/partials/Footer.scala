@@ -13,7 +13,7 @@ trait Footer {
 
   def footer = {
     div(cls:="footer")(
-       Rx{s"status: ${if(GlobalSheetState.editMode()){s"EDIT ${GlobalSheetState.currentCellDiv()}"} else{"BROWSE"}  }"}
+       Rx{s"status: ${if(GlobalSheetState.editMode()) "EDIT" else "BROWSE"} ${GlobalSheetState.currentCellRef().toPublicString}"}
     )
 
   }

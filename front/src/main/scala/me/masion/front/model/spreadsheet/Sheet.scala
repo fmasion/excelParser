@@ -14,9 +14,11 @@ import scala.util.{Failure, Success}
  */
 case class Sheet(internalGrid: Var[Map[CellRef, Cell]]= Var(Map.empty), internalRows: Var[Map[Int, Row]]= Var(Map.empty), internalColumns: Var[Map[Int, Column]]= Var(Map.empty)) {
 
-  def grid(cellRef: CellRef) = internalGrid().getOrElse(cellRef, Cell.DEFAULT)
+  def grid(cellRef: CellRef):Option[Cell] = internalGrid().get(cellRef)
   def row(i: Int) = internalRows().getOrElse(i, Row.default)
   def column(i: Int) = internalColumns().getOrElse(i, Column.default)
+
+  def cellRef(cell:Cell): Option[CellRef] = internalGrid().find{case (k,v) => v == cell}.map(_._1)
 
   //Give the top or left posistion of a row/column based on precedant row/column size and visibility
   def rowTop(pos:Int) = Iterator.from(1).map( i => row(i) ).filterNot(_.hidden).take(pos -1).map(_.height).sum
@@ -49,8 +51,8 @@ case class Sheet(internalGrid: Var[Map[CellRef, Cell]]= Var(Map.empty), internal
 
   def update(cellRef:CellRef, input:String) = {
     grid(cellRef) match{
-      case Cell.DEFAULT => internalGrid() = internalGrid() + (cellRef -> Cell(Var(input)))
-      case cell => cell.input() =input
+      case None => internalGrid() = internalGrid() + (cellRef -> Cell(Var(input)))
+      case Some(cell) => cell.input() =input
     }
 
   }

@@ -3,6 +3,7 @@ package me.masion.front.model
 import me.masion.excelParser.evaluator.Evaluator
 import me.masion.excelParser.models.cellsReferences.{ColumnRef, CellRangeRef, CellAreaRef, CellRef}
 import me.masion.excelParser.api.{CellApi, CellProvider}
+import me.masion.front.managers.DomUpdater
 import me.masion.front.model.spreadsheet.{Cell, Sheet}
 import org.scalajs.dom.MouseEvent
 
@@ -15,7 +16,7 @@ import scala.scalajs.js.annotation.{JSExportAll, JSExport}
  */
 case class Point(x:Double, y:Double)
 
-object GlobalSheetState extends CellProvider with Evaluator {
+object GlobalSheetState extends CellProvider with Evaluator with DomUpdater {
 
   val displayMode = Var(1) // 1/2/3 result/
 
@@ -35,34 +36,31 @@ object GlobalSheetState extends CellProvider with Evaluator {
   val displayOffset = Rx{Point(colDisplayRange().head -1, rowDisplayRange().head -1)}
 
   val editMode:Var[Boolean] = Var(false)
-  val currentCellDiv = Var(Point(0, 0))
-  val currentCellRef: Rx[Option[CellRef]] = Rx{ currentCellDiv() match{
-    case p if(p.x >0 || p.y >0) => Some(pointToCellRef(p))
-    case Point(0,0) => None
-  }}
-  val currentCell: Rx[Option[Cell]]= Rx{ currentCellRef().map(cellRefToCell(_))}
+
+  val currentCellRef: Var[CellRef] = Var(CellRef(1,1))
+  val currentCell: Rx[Option[Cell]] = Rx{ currentSheet().grid(currentCellRef()) }
+
 
   def pointToCellRef(point:Point) = CellRef((point.x + displayOffset().x).toLong, (point.y + displayOffset().y).toLong)
   override def cellRefToCell(cellRef:CellRef) = GlobalSheetState.currentSheet().grid(cellRef)
   def pointToCell(p:Point) = cellRefToCell(pointToCellRef(p))
-  override def cellAreaToCells(cellAreaRef: CellAreaRef): Seq[Cell] = cellAreaRef.cells.map(cellRefToCell)
+  override def cellAreaToCells(cellAreaRef: CellAreaRef): Seq[Cell] = cellAreaRef.cells.map(cellRefToCell).collect{case Some(c) => c}
 
-  def currentCol = Rx { currentCellRef().map(_.col)}
-  def currentRow = Rx { currentCellRef().map(_.row)}
-  def cellSelected = Rx { currentCell().isDefined }
+  def currentCol = Rx { currentCellRef().col}
+  def currentRow = Rx { currentCellRef().row}
 
 
 
   def setCurrentSheet(sheet:Sheet) = currentSheet() = sheet
 
-  ///
+
 
   def cellClick(col:Int,row:Int)( e:MouseEvent)={
-    currentCellDiv() = (Point(col,row))
+    currentCellRef() = CellRef(col,row)
   }
 
   def cellDblClick(col:Int,row:Int)( e:MouseEvent)={
-    currentCellDiv() = (Point(col,row))
+    currentCellRef() = CellRef(col,row)
     editMode() = true
   }
 
@@ -73,9 +71,12 @@ object GlobalSheetState extends CellProvider with Evaluator {
       currentSheet() = testSheet
     }
     if((""+t).contains("Edition")){
-      val toto = currentSheet().internalGrid().map{case (k, v) => (k, v.input() + " " + v.value() + " " + v.errorTip() )}
+      val toto = currentSheet().internalGrid()
       println(""+toto)
     }
+
+
+    domUpdaterInit
 
   }
 

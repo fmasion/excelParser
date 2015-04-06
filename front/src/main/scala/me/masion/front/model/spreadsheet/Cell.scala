@@ -14,10 +14,10 @@ import scala.util.{Failure, Success}
  * Created by fred on 02/04/15.
  */
 case class Cell(input:Var[String], override val errorTip: Var[ParsingError] = Var(Nope), rowSpan:Int=1, colSpan:Int=1) extends CellApi {
+
+  lazy val isSelected = Rx{ GlobalSheetState.currentCell().map(_ == this).getOrElse(false)   }
   // inject the concerte Evaluator impl
   override def evalutorDelegate: (ASTNode) => Either[EvaluationError, Primitive] = GlobalSheetState.evaluate(_)
-}
 
-object Cell{
-  val DEFAULT = Cell(Var(""))
+  override def toString = s"Cell(input: ${input()}, errorTip: ${errorTip()}, rowSpan: ${rowSpan}, colSpan: ${colSpan}"
 }
