@@ -12,8 +12,11 @@ import scala.util.{Failure, Success}
  * Created by fred on 05/04/15.
  */
 trait CellApi {
+
   val errorTip:Var[ParsingError] =Var(Nope)
-  def input:Var[String]
+
+  def value: Rx[Either[EvaluationError, Primitive]] = Rx { evalutorDelegate(ast()) }
+
   def ast:Rx[ASTNode] = Rx {
     val parser = new FormulaParser(input())
     parser.InputLine.run() match{
@@ -33,6 +36,9 @@ trait CellApi {
     }
   }
 
-  def value:Rx[Primitive]
+  // to implement
+  def input:Var[String]
+  // inject the concerte Evaluator impl
+  def evalutorDelegate: (ASTNode) => Either[EvaluationError, Primitive]
 
 }

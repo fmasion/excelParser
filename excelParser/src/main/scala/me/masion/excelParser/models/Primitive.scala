@@ -1,5 +1,6 @@
 package me.masion.excelParser.models
 
+import me.masion.excelParser.evaluator.EvaluationException
 import me.masion.excelParser.models.ast.ASTNode
 import me.masion.excelParser.models.functionast.{ArithmeticFunction, LogicalFunction}
 import me.masion.excelParser.models.utils.DateTime
@@ -23,14 +24,14 @@ case class Numeric(value: Double) extends Primitive with ArithmeticFunction {
 case class Bool(value: Boolean) extends Primitive with LogicalFunction with ArithmeticFunction {
   override def toDouble: Double = if(value) 1 else 0
   override def toBoolean: Boolean = value
-  override def toDate: DateTime = throw new IllegalArgumentException //(List("can't change Boolean to Date").toArray)
+  override def toDate: DateTime = throw new EvaluationException("can't change Boolean to Date")
   override def toString: String = if(value) "TRUE" else "FALSE"
   override def compare(that: Primitive): Int = value.compareTo(that.toBoolean)
 }
 case class Str(value: String) extends Primitive with ArithmeticFunction {
-  override def toDouble: Double = throw new IllegalArgumentException //(List("can't change Boolean to Date").toArray)
+  override def toDouble: Double = throw new EvaluationException("can't change Boolean to Date")
   override def toBoolean: Boolean = value.equalsIgnoreCase("true")
-  override def toDate: DateTime = throw new IllegalArgumentException //(List("can't change Boolean to Date").toArray)
+  override def toDate: DateTime = throw new EvaluationException("can't change Boolean to Date")
   override def toString: String = value
   override def compare(that: Primitive): Int = value.compareTo(that.toString)
 }
@@ -43,8 +44,8 @@ case class Dat(value: DateTime) extends Primitive with ArithmeticFunction {
 }
 case object EmptyPrimitive extends Primitive with ArithmeticFunction {
   override def toDouble: Double = 0
-  override def toBoolean: Boolean = throw new IllegalArgumentException //(List("can't change Boolean to Date").toArray)
-  override def toDate: DateTime = throw new IllegalArgumentException //(List("can't change Boolean to Date").toArray)
+  override def toBoolean: Boolean = throw new EvaluationException("can't change Boolean to Date")
+  override def toDate: DateTime = throw new EvaluationException("can't change Boolean to Date")
   override def toString: String = ""
   override def compare(that: Primitive): Int = -1
 }

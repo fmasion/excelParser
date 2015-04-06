@@ -2,29 +2,35 @@ package me.masion.excelParser.evaluator
 
 import me.masion.excelParser.api.CellProvider
 import me.masion.excelParser.models.cellsReferences.CellRef
-import me.masion.excelParser.models.{Bool, Primitive}
+import me.masion.excelParser.models._
 import me.masion.excelParser.models.ast.ASTNode
 import me.masion.excelParser.models.functionast._
 
 import scala.util.Try
 
 
-class EvaluationException(strings:Array[String]) extends IllegalArgumentException
+class EvaluationException(msg: String) extends RuntimeException(msg)
 /**
  * Created by fred on 05/04/15.
  */
 trait Evaluator extends CellProvider {
   import math._
 
-  def evaluate(ast:ASTNode):Try[Primitive] = Try(runEvaluate(ast))
+  def evaluate(ast:ASTNode):Either[EvaluationError, Primitive] = try {
+    Right(runEvaluate(ast))
+  }catch {
+    case e: EvaluationException => Left(EvaluationTypeError(e.getMessage))
+  }
 
-
-  private def runEvaluate(ast:ASTNode):Primitive = {
+    private def runEvaluate(ast:ASTNode):Primitive = {
     import me.masion.excelParser.models.Numeric
 
     ast match {
       case p:Primitive          => p
-      case c : CellRef          => this.cellRefToCell(c:CellRef).value()
+      case c : CellRef          => this.cellRefToCell(c:CellRef).value() match{
+        case Right(p)   => p
+        case Left(e)    => throw new EvaluationException(e.msg)
+      }
 
       // Arithmetic
       case Multiply(lhs, rhs)   => Numeric(runEvaluate(lhs).toDouble * runEvaluate(rhs).toDouble)

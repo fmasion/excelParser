@@ -29,7 +29,10 @@ trait Table {
         onclick:=GlobalSheetState.cellClick(col,row) _ ,
         ondblclick:=GlobalSheetState.cellDblClick(col,row) _ )(
         Rx{ val cell = GlobalSheetState.pointToCell(Point(col, row))
-          cell.value().toString //input()
+          cell.value() match{
+            case Right(p) => p.toString
+            case Left(e) => "#VALEUR!"
+          }
         }
       )
     }

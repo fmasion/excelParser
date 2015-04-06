@@ -14,17 +14,8 @@ import scala.util.{Failure, Success}
  * Created by fred on 02/04/15.
  */
 case class Cell(input:Var[String], override val errorTip: Var[ParsingError] = Var(Nope), rowSpan:Int=1, colSpan:Int=1) extends CellApi {
-
-  def value: Rx[Primitive] = Rx {
-    GlobalSheetState.evaluate(ast()) match{
-      case Success(p) => p
-      case Failure(e) => {
-        e.printStackTrace()
-        errorTip() = EvaluationException(""+e.getStackTrace.toList)
-        Str(input())
-      }
-    }
-  }
+  // inject the concerte Evaluator impl
+  override def evalutorDelegate: (ASTNode) => Either[EvaluationError, Primitive] = GlobalSheetState.evaluate(_)
 }
 
 object Cell{
