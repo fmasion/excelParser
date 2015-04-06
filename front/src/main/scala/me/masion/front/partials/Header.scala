@@ -84,6 +84,7 @@ trait Header {
                 GlobalSheetState.updateCurrentCell(myInput.value)
                 destroyInput
               }
+              case _ => ()
             }
         }
       ).render

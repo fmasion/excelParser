@@ -2,11 +2,11 @@ package me.masion.front.partials.table
 
 import me.masion.excelParser.models.{Primitive, EvaluationError}
 import me.masion.front.model.{Point, GlobalSheetState}
-import org.scalajs.dom.html.Div
 
-import scala.collection.immutable.IndexedSeq
-import scalatags.JsDom.TypedTag
 import scalatags.JsDom.all._
+import scalatags.rx.all._
+import rx._
+
 import org.scalajs.jquery._
 
 /**
@@ -15,8 +15,8 @@ import org.scalajs.jquery._
 trait Table {
 
   def table = div(id:="table", cls:="table")(
-    container//,
-    //overlay
+    container //,
+    //inputHolder
   )
 
   def container = div(id:= "container", cls:="container")()
@@ -46,8 +46,13 @@ trait Table {
   }
 
 
-  def inputHolder() = div(cls:="InputHolder", style:="display: none")(
-    textarea(cls:="handsontableInput", style:="width: 41px; height: 23px; font-size: 14px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; resize: none; min-width: 41px; max-width: 1642px; overflow-y: hidden;")
-  )
+  def inputHolder() = div(
+    cls:=Rx{s"InputHolder column${GlobalSheetState.currentCol()} row${GlobalSheetState.currentRow()}"} ,
+    style:=Rx{s" ${if(!GlobalSheetState.editMode()) "display: none"}" }
+  )(
+      textarea(
+        cls:="handsontableInput",
+        value:= Rx{GlobalSheetState.currentCell().map{_.input()}.getOrElse("")}
+  ))
 
 }
