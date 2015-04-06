@@ -23,29 +23,39 @@ trait Table {
     inputHolder
   )
 
-  def container = div(id:= "container", cls:="container")()
+  def container = {
+    //HACK PAS BO
+    Obs(GlobalSheetState.currentSheet().internalGrid){
+      updateContainerContant
+    }
+    Obs(GlobalSheetState.currentCellRef){
+      updateContainerContant
+    }
+    div(id:= "container", cls:="container")()
+  }
 
   def updateContainerContant = {
     jQuery("#container").empty()
-    val newContent = for{
-      row <- GlobalSheetState.rowDisplayRange()
-      col <- GlobalSheetState.colDisplayRange()
-    } yield{
-      val thisCellRef = GlobalSheetState.pointToCellRef(Point(col, row))
-      val isSelected = GlobalSheetState.currentCellRef() == thisCellRef
-      val oCell: Option[Either[EvaluationError, Primitive]] = GlobalSheetState.pointToCell(Point(col, row)).map(_.value())
-      div(cls:=s"cell row${row} column${col} ${if(isSelected) "selectedCell"}",
-        onclick:=GlobalSheetState.cellClick(col,row) _ ,
-        ondblclick:=GlobalSheetState.cellDblClick(col,row) _ )(
-          oCell match{
-            case Some(Right(p)) => p.toString
-            case Some(Left(e))  => "#VALEUR!"
-            case None           => ""
-          }
-        )
-    }.render
-
-    jQuery("#container").append(newContent.toArray:_*)
+    val newContent = {
+      for {
+        row <- GlobalSheetState.rowDisplayRange()
+        col <- GlobalSheetState.colDisplayRange()
+      } yield {
+        val thisCellRef = GlobalSheetState.pointToCellRef(Point(col, row))
+        val isSelected = GlobalSheetState.currentCellRef() == thisCellRef
+        val oCell: Option[Either[EvaluationError, Primitive]] = GlobalSheetState.pointToCell(Point(col, row)).map(_.value())
+        div(cls := s"cell row${row} column${col} ${if (isSelected) "selectedCell"}",
+          onclick := GlobalSheetState.cellClick(col, row) _,
+          ondblclick := GlobalSheetState.cellDblClick(col, row) _)(
+            oCell match {
+              case Some(Right(p)) => p.toString
+              case Some(Left(e)) => "#VALEUR!"
+              case None => ""
+            }
+          )
+      }.render
+    }
+    jQuery("#container").append(newContent.toArray: _*)
 
   }
 
