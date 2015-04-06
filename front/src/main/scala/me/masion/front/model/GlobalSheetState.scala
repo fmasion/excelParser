@@ -1,7 +1,7 @@
 package me.masion.front.model
 
 import me.masion.excelParser.evaluator.Evaluator
-import me.masion.excelParser.models.cellsReferences.{CellRangeRef, CellAreaRef, CellRef}
+import me.masion.excelParser.models.cellsReferences.{ColumnRef, CellRangeRef, CellAreaRef, CellRef}
 import me.masion.excelParser.api.{CellApi, CellProvider}
 import me.masion.front.model.spreadsheet.{Cell, Sheet}
 import org.scalajs.dom.MouseEvent
@@ -83,11 +83,17 @@ object GlobalSheetState extends CellProvider with Evaluator {
 
   val testSheet: Sheet = {
     val sheet= Sheet()
+    val testRange = 1 to 5
     for {
-      col <- colDisplayRange()
-      row <- rowDisplayRange()
+      col <- testRange
+      row <- testRange
     } yield{
       sheet.update(CellRef(col, row), s"=${col}+${row}")
+    }
+    for {
+      col <- testRange
+    }yield{
+      sheet.update(CellRef(col, 6), s"=${CellRef.from(ColumnRef.positionToColumn(col), ""+5).toPublicString}+${CellRef.from(ColumnRef.positionToColumn(col), ""+4).toPublicString}")
     }
     sheet
   }

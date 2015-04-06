@@ -12,6 +12,8 @@ sealed trait CellAreaRef{
 }
 case class CellRef(col:Long, row:Long, dollarX:Boolean=false, dollarY:Boolean=false) extends CellAreaRef with ASTNode {
   override def cells: Seq[CellRef] = Seq(this)
+  def toPublicString = (s"${withDollar(dollarX)}${ColumnRef.positionToColumn(col)}${withDollar(dollarY)}${row}")
+  private def withDollar(b:Boolean) = if(b) "$" else ""
 }
 case class CellRangeRef(startRef: CellRef, endRef: CellRef) extends CellAreaRef {
   override def cells: Seq[CellRef] = for{
@@ -51,9 +53,11 @@ case class RowRangeRef(startRow: Long, endRow: Long) extends CellAreaRef with Ce
 
 object CellRef{
   def from(col:String, row:String) = {
+    val dollarX = col.contains("$")
+    val dollarY = row.contains("$")
     val ccol = col.replace("$", "")
     val crow = row.replace("$", "")
-    CellRef(ColumnRef.columnToPosition(ccol),crow.toLong)
+    CellRef(ColumnRef.columnToPosition(ccol),crow.toLong, dollarX, dollarY)
   }
 }
 
