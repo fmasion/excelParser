@@ -70,10 +70,11 @@ object FormulaTestSuite extends SimpleTestSuite {
 
   test("Formula before Date : ' = 5-2 '") {
     val parser = new FormulaParser(" = 5 - 2 ")
-//    parser.InputLine.run() match {
-//      case Success(s) => println("HELLO"+s)
-//      case Failure(f) => println("HELLY"+f )
-//    }
+    assert(parser.InputLine.run() == Success(Substract(Numeric(5), Numeric(2))))
+  }
+
+  test("Formula before Date : ' = 5-2 '") {
+    val parser = new FormulaParser("=5-2")
     assert(parser.InputLine.run() == Success(Substract(Numeric(5), Numeric(2))))
   }
 

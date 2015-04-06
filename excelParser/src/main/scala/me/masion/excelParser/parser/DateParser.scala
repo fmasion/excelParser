@@ -70,7 +70,7 @@ trait DateParser extends Parser with ParserUtils  {
   def Digit2w0 = rule { (Digit ~ Digit | Digit) }
   def Digit2 = rule { (Digit ~ Digit | Digit19) }
   def Digit4 = rule { (Digit19 ~ Digit ~ Digit ~ Digit) }
-  def DateSEP:Rule0 = rule { SlashSEP | MinusSEP }
+  def DateSEP:Rule0 = rule { SlashSEP  }
   def SlashSEP = rule { DATE_SEP }
   def MinusSEP = rule {  ALT_DATE_SEP }
 

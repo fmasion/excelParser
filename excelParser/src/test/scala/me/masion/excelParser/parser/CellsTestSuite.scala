@@ -39,10 +39,6 @@ object CellsTestSuite extends SimpleTestSuite {
   test("should parse a Cell $AA$120") {
     val parser = new Tester("$AA$120") with CellsParser
     //println(parser.Cell.run())
-        parser.Cell.run() match {
-          case Success(s) => println("HELLO"+s)
-          case Failure(f) => println("HELLY"+f )
-        }
     assert(parser.Cell.run() == Success(CellRef(27,120,true,true)))
   }
 

@@ -99,10 +99,10 @@ object PrimitiveTestSuite extends SimpleTestSuite {
 
   ///With Alternative separator
 
-  test("Date Input : 25-12-1976   20:30:10") {
-    val parser = new FormulaParser("  25-12-1976   20:30:10  ")
-    assert(parser.InputLine.run() == Success(Dat(DateTime(1976,12,25,20,30,10))))
-  }
+//  test("Date Input : 25-12-1976   20:30:10") {
+//    val parser = new FormulaParser("  25-12-1976   20:30:10  ")
+//    assert(parser.InputLine.run() == Success(Dat(DateTime(1976,12,25,20,30,10))))
+//  }
 
 
 

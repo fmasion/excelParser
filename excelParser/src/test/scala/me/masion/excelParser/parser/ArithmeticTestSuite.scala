@@ -22,6 +22,15 @@ object ArithmeticTestSuite extends SimpleTestSuite {
     assert(parser.InputLine.run() == Success(Add(Numeric(57), Numeric(1))))
   }
 
+  test("Integer should not parse date : =5-1") {
+  val parser = new FormulaParser("=5-1")
+  //    parser.InputLine.run() match {
+  //      case Success(s) => println("HELLO"+s)
+  //      case Failure(f) => println(""+f )
+  //    }
+  assert(parser.InputLine.run() == Success(Substract(Numeric(5), Numeric(1))))
+}
+
   test("cell : A1 + B1") {
     val parser = new FormulaParser(" = A1 + B1")
     assert(parser.InputLine.run() == Success(Add(CellRef(1,1), CellRef(2,1))))
