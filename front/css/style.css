@@ -1,5 +1,7 @@
 html, body{
     height: 100%;
+    font-family: arial,sans,sans-serif;
+    font-size: 13px;
 }
 /* header class */
 .header{

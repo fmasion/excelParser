@@ -64,6 +64,10 @@ object GlobalSheetState extends CellProvider with Evaluator with DomUpdater {
     editMode() = true
   }
 
+  def updateCurrentCell(input:String) = {
+    currentSheet().update(currentCellRef(),input)
+  }
+
   def dummyAction(e:MouseEvent) = {
     val t = e.target
     //dom.alert(""+t)

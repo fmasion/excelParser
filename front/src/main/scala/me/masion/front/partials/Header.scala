@@ -1,10 +1,16 @@
 package me.masion.front.partials
 
+import me.masion.front.SpreadSheet
 import me.masion.front.model.GlobalSheetState
+import me.masion.front.model.spreadsheet.Sheet
+import org.scalajs.dom.KeyboardEvent
+import org.scalajs.dom.ext.KeyCode
+import org.scalajs.dom.html.Input
 
+import org.scalajs.jquery._
 import scalatags.JsDom.all._
-import rx._
 import scalatags.rx.all._
+import rx._
 
 /**
  * Created by fred on 02/04/15.
@@ -60,18 +66,57 @@ trait Header {
           li( a( href:="javascript:void(0)")(i( cls:="icon-bar-chart")))
         )
       ),
-      div(cls:="function-bar")(
-        span(cls:="icon-function"),
-        input(`type`:="text"){
-//          Rx {
-//            val currentCell = GlobalSheetState.currentCell()
-//            println(currentCell)
-//            ""+currentCell.input()
-//          }
-        }
-      )
+      functionBar
     )
-
   }
+
+  def functionBar = {
+
+    def createInput ={
+      destroyInput
+      lazy val myInput: Input = input(`type`:="text", id:="formula-input",
+        autofocus:=true,
+        value:=GlobalSheetState.currentCell().map(c => "" + c.input()).getOrElse(""),
+        onkeyup:= { (e:KeyboardEvent) =>
+            e.keyCode match{
+              case KeyCode.escape => destroyInput
+              case KeyCode.enter => {
+                GlobalSheetState.updateCurrentCell(myInput.value)
+                destroyInput
+              }
+            }
+        }
+      ).render
+      jQuery(".function-bar").append(myInput)
+    }
+    def destroyInput ={
+      jQuery("#formula-input").remove()
+      showDiv
+    }
+    Obs(GlobalSheetState.currentCell){
+      destroyInput
+    }
+
+    def hideDiv = {
+      jQuery(".inputph").hide()
+    }
+    def showDiv = {
+      jQuery(".inputph").show()
+    }
+
+    div(cls := "function-bar")(
+      span(cls := "icon-function"),
+      div(cls:="inputph",
+        style:="position: relative",
+        onclick:={ () =>
+          createInput
+          hideDiv
+        })(
+        Rx { GlobalSheetState.currentCell().map(c => "" + c.input()).getOrElse("") }
+    )
+    )
+  }
+
+
 
 }

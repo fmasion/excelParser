@@ -16,6 +16,8 @@ trait DomUpdater extends Table {
   def domUpdaterInit = {
     val sheetChange = Obs(GlobalSheetState.currentSheet){ updateContainerContant }
 
+    
+
 
 
 

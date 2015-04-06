@@ -19,5 +19,5 @@ case class Cell(input:Var[String], override val errorTip: Var[ParsingError] = Va
   // inject the concerte Evaluator impl
   override def evalutorDelegate: (ASTNode) => Either[EvaluationError, Primitive] = GlobalSheetState.evaluate(_)
 
-  override def toString = s"Cell(input: ${input()}, errorTip: ${errorTip()}, rowSpan: ${rowSpan}, colSpan: ${colSpan}"
+  override def toString = s"Cell(input: ${input()}, errorTip: ${errorTip()}, rowSpan: ${rowSpan}, colSpan: ${colSpan}, value: ${value()}"
 }

@@ -3,7 +3,7 @@ package me.masion.excelParser.parser
 import me.masion.excelParser.models.cellsReferences._
 import minitest.SimpleTestSuite
 
-import scala.util.Success
+import scala.util.{Failure, Success}
 
 /**
  * Created by fred on 29/03/15.
@@ -39,7 +39,11 @@ object CellsTestSuite extends SimpleTestSuite {
   test("should parse a Cell $AA$120") {
     val parser = new Tester("$AA$120") with CellsParser
     //println(parser.Cell.run())
-    assert(parser.Cell.run() == Success(CellRef(27,120)))
+        parser.Cell.run() match {
+          case Success(s) => println("HELLO"+s)
+          case Failure(f) => println("HELLY"+f )
+        }
+    assert(parser.Cell.run() == Success(CellRef(27,120,true,true)))
   }
 
   /////CellRange

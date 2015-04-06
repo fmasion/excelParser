@@ -12,7 +12,7 @@ class FormulaParser(val input: ParserInput) extends Parser with CellsParser with
 
   def InputLine =  rule { OptionalSpaces ~ Input ~ OptionalSpaces ~ EOI }
 
-  def Input = rule { Formula | ArithmeticExpression | Primitive  }
+  def Input = rule { ArithmeticExpression | Formula | Primitive  }
 
   def Expression:Rule1[ASTNode] = rule { Parens | Function | ComparisonFunction | Cell | Primitive }
 
