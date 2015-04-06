@@ -56,11 +56,20 @@ object GlobalSheetState extends CellProvider with Evaluator with DomUpdater {
 
 
   def cellClick(col:Int,row:Int)( e:MouseEvent)={
-    currentCellRef() = CellRef(col,row)
+    // optimize event propagation
+    val clickedCellRef = CellRef(col,row)
+    if(currentCellRef() != clickedCellRef) {
+      currentCellRef() = clickedCellRef
+      editMode() = false
+    }
   }
 
   def cellDblClick(col:Int,row:Int)( e:MouseEvent)={
-    currentCellRef() = CellRef(col,row)
+    // optimize event propagation
+    val clickedCellRef = CellRef(col,row)
+    if(currentCellRef() != clickedCellRef) {
+      currentCellRef() = clickedCellRef
+    }
     editMode() = true
   }
 

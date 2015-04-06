@@ -1,7 +1,11 @@
 package me.masion.front.partials.table
 
 import me.masion.excelParser.models.{Primitive, EvaluationError}
+import me.masion.front.model
 import me.masion.front.model.{Point, GlobalSheetState}
+import org.scalajs.dom.KeyboardEvent
+import org.scalajs.dom.ext.KeyCode
+import org.scalajs.dom.html.Input
 
 import scalatags.JsDom.all._
 import scalatags.rx.all._
@@ -15,8 +19,8 @@ import org.scalajs.jquery._
 trait Table {
 
   def table = div(id:="table", cls:="table")(
-    container //,
-    //inputHolder
+    container,
+    inputHolder
   )
 
   def container = div(id:= "container", cls:="container")()
@@ -46,13 +50,51 @@ trait Table {
   }
 
 
-  def inputHolder() = div(
-    cls:=Rx{s"InputHolder column${GlobalSheetState.currentCol()} row${GlobalSheetState.currentRow()}"} ,
-    style:=Rx{s" ${if(!GlobalSheetState.editMode()) "display: none"}" }
-  )(
-      textarea(
-        cls:="handsontableInput",
-        value:= Rx{GlobalSheetState.currentCell().map{_.input()}.getOrElse("")}
-  ))
+  def inputHolder() = {
+    Obs(GlobalSheetState.currentCell){
+      destroyInput
+    }
+    Obs(GlobalSheetState.editMode){
+      if(GlobalSheetState.editMode()){
+        val newInput = holderInput
+        jQuery(".inputHolder").append(newInput)
+      }else{
+        destroyInput
+      }
+    }
+    div(
+      cls:=Rx{s"selectedCell inputHolder column${GlobalSheetState.currentCol()} row${GlobalSheetState.currentRow()}"} ,
+      style:=Rx{s" ${if(!GlobalSheetState.editMode()) "display: none"}" }
+    )
+  }
+
+  def destroyInput ={
+    jQuery("#tableInput").remove()
+  }
+
+  def holderInput = {
+    lazy val internal: Input = input(
+      autofocus,
+      cls := "tableInput",
+      id := "tableInput",
+      value := Rx {
+        GlobalSheetState.currentCell().map {
+          _.input()
+        }.getOrElse("")
+      },
+      onkeyup := { (e: KeyboardEvent) =>
+        e.keyCode match {
+          case KeyCode.escape => destroyInput
+          case KeyCode.enter => {
+            GlobalSheetState.updateCurrentCell(internal.value)
+            GlobalSheetState.editMode()=false
+            destroyInput
+          }
+          case _ => ()
+        }
+      }
+    ).render
+    internal
+  }
 
 }
