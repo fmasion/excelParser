@@ -7,16 +7,45 @@ import me.masion.excelParser.models.ast.ASTNode
  */
 
 
-sealed trait CellAreaRef
-case class CellRef(col:Long, row:Long, dollarX:Boolean=false, dollarY:Boolean=false) extends CellAreaRef with ASTNode
-case class SingleCellRef(cellRef: CellRef) extends CellAreaRef
-case class CellRangeRef(startRef: CellRef, endRef: CellRef) extends CellAreaRef
-case class CellIntersectionRef(cellAreas:Seq[CellAreaRef]) extends CellAreaRef
-case class CellUnionRef(cellAreas:Seq[CellAreaRef]) extends CellAreaRef
+sealed trait CellAreaRef{
+  def cells:Seq[CellRef]
+}
+case class CellRef(col:Long, row:Long, dollarX:Boolean=false, dollarY:Boolean=false) extends CellAreaRef with ASTNode {
+  override def cells: Seq[CellRef] = Seq(this)
+}
+case class CellRangeRef(startRef: CellRef, endRef: CellRef) extends CellAreaRef {
+  override def cells: Seq[CellRef] = for{
+    col <- startRef.col to endRef.col
+    row <- startRef.row to endRef.col
+  }yield{
+      CellRef(col,row)
+    }
+}
+case class CellIntersectionRef(cellAreas:Seq[CellAreaRef]) extends CellAreaRef {
+  override def cells: Seq[CellRef] = {
+    //TODO
+    Seq.empty
+  }
+}
+case class CellUnionRef(cellAreas:Seq[CellAreaRef]) extends CellAreaRef {
+  override def cells: Seq[CellRef] = {
+    cellAreas.foldLeft(Seq.empty[CellRef])(_ ++ _.cells ).distinct
+  }
+}
 
 sealed trait CellVectorRef
-case class ColumnRangeRef(startCol: Long, endCol: Long) extends CellAreaRef with CellVectorRef
-case class RowRangeRef(startRow: Long, endRow: Long) extends CellAreaRef with CellVectorRef
+case class ColumnRangeRef(startCol: Long, endCol: Long) extends CellAreaRef with CellVectorRef {
+  override def cells: Seq[CellRef] = {
+    //TODO
+    Seq.empty
+  }
+}
+case class RowRangeRef(startRow: Long, endRow: Long) extends CellAreaRef with CellVectorRef {
+  override def cells: Seq[CellRef] = {
+    //TODO
+    Seq.empty
+  }
+}
 
 
 

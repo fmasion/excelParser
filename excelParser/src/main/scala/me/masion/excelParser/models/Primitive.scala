@@ -7,34 +7,44 @@ import me.masion.excelParser.models.utils.DateTime
 /**
  * Created by fred on 27/03/15.
  */
-sealed trait Primitive extends ASTNode
-case class Numeric(value: Double) extends Primitive with ArithmeticFunction
-case class Bool(value: Boolean) extends Primitive with LogicalFunction with ArithmeticFunction
-case class Str(value: String) extends Primitive with ArithmeticFunction
-case class Dat(value: DateTime) extends Primitive with ArithmeticFunction
-case object EmptyPrimitive extends Primitive with ArithmeticFunction
-
-
-object Primitive{
-//  implicit def NumericToBool(num:Numeric):Bool = num match{
-//    case Numeric(0) => Bool(false)
-//    case _ => Bool(true)
-//  }
-//
-//  implicit def BoolToNumeric(num:Bool):Numeric = num match{
-//    case Bool(true) => Numeric(1)
-//    case _ => Numeric(0)
-//  }
-//
-//  implicit def DatToNumeric(dat:Dat):Numeric = Numeric(dat.value.toDouble)
-//
-//
-//  implicit def DatToBool(dat:Dat):Numeric = dat match{
-//    case Dat(value) if(value.toDouble == 0) => Bool(false)
-//    case _ => Bool(true)
-//  }
-
-  //implicit def EmptyToNumeric(num:EmptyPrimitive):Numeric = Numeric(0)
-
-
+sealed trait Primitive extends ASTNode with Ordered[Primitive]{
+  def toDouble:Double
+  def toBoolean:Boolean
+  def toDate:DateTime
+  def toString:String
+}
+case class Numeric(value: Double) extends Primitive with ArithmeticFunction {
+  override def toDouble: Double = value
+  override def toBoolean: Boolean = !(value == 0)
+  override def toDate: DateTime = DateTime.fromDouble(value)
+  override def toString: String = value.toString
+  override def compare(that: Primitive): Int = value.compareTo(that.toDouble)
+}
+case class Bool(value: Boolean) extends Primitive with LogicalFunction with ArithmeticFunction {
+  override def toDouble: Double = if(value) 1 else 0
+  override def toBoolean: Boolean = value
+  override def toDate: DateTime = throw new IllegalArgumentException //(List("can't change Boolean to Date").toArray)
+  override def toString: String = if(value) "TRUE" else "FALSE"
+  override def compare(that: Primitive): Int = value.compareTo(that.toBoolean)
+}
+case class Str(value: String) extends Primitive with ArithmeticFunction {
+  override def toDouble: Double = throw new IllegalArgumentException //(List("can't change Boolean to Date").toArray)
+  override def toBoolean: Boolean = value.equalsIgnoreCase("true")
+  override def toDate: DateTime = throw new IllegalArgumentException //(List("can't change Boolean to Date").toArray)
+  override def toString: String = value
+  override def compare(that: Primitive): Int = value.compareTo(that.toString)
+}
+case class Dat(value: DateTime) extends Primitive with ArithmeticFunction {
+  override def toDouble: Double = value.toDouble
+  override def toBoolean: Boolean = value.toDouble > DateTime(1900,1,1).toDouble
+  override def toDate: DateTime = value
+  override def toString: String = value.toIsoDateString
+  override def compare(that: Primitive): Int = value.toDouble.compareTo(that.toDouble)
+}
+case object EmptyPrimitive extends Primitive with ArithmeticFunction {
+  override def toDouble: Double = 0
+  override def toBoolean: Boolean = throw new IllegalArgumentException //(List("can't change Boolean to Date").toArray)
+  override def toDate: DateTime = throw new IllegalArgumentException //(List("can't change Boolean to Date").toArray)
+  override def toString: String = ""
+  override def compare(that: Primitive): Int = -1
 }

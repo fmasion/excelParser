@@ -1,6 +1,6 @@
 package me.masion.front.partials.table
 
-import me.masion.front.model.GlobalSheetState
+import me.masion.front.model.{Point, GlobalSheetState}
 import org.scalajs.dom
 import org.scalajs.dom.MouseEvent
 import org.scalajs.dom.html.Div
@@ -28,7 +28,9 @@ trait Table {
       div(cls:=s"cell row${row} column${col} ",
         onclick:=GlobalSheetState.cellClick(col,row) _ ,
         ondblclick:=GlobalSheetState.cellDblClick(col,row) _ )(
-        ""+col + "," +row
+        Rx{ val cell = GlobalSheetState.pointToCell(Point(col, row))
+          cell.value().toString //input()
+        }
       )
     }
   )

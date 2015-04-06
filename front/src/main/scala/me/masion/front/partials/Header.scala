@@ -1,5 +1,7 @@
 package me.masion.front.partials
 
+import me.masion.front.model.GlobalSheetState
+
 import scalatags.JsDom.all._
 import rx._
 import scalatags.rx.all._
@@ -14,7 +16,7 @@ trait Header {
       div(cls:="main-header")(
         div(cls:="left-nav")(i(cls:="logicon")),
         div(cls:="button-container pull-right")(
-          a(href:="https://github.com/fmasion", target:="_blank", cls:="btn btn-github")(i( cls:="icon-github")( "Fork Me on Github"))
+          a(href:="https://github.com/fmasion/excelParser", target:="_blank", cls:="btn btn-github")(i( cls:="icon-github")( "Fork Me on Github"))
         ),
         div(cls:="title-doc")(
           "Incredible Fred Spreadsheet" //,
@@ -22,13 +24,13 @@ trait Header {
         ),
         div(cls:="main-menu")(
           ul(cls:="list-nav")(
-            li( a( href:="javascript:void(0)")("Fichier")),
-            li( a( href:="javascript:void(0)")("Edition")),
-            li( a( href:="javascript:void(0)")("Affichage")),
-            li( a( href:="javascript:void(0)")("Insertion")),
-            li( a( href:="javascript:void(0)")("Format")),
-            li( a( href:="javascript:void(0)")("Données")),
-            li( a( href:="javascript:void(0)")("Aide"))
+            li( a( href:="#/Fichier")("Fichier"), onclick:=GlobalSheetState.dummyAction _),
+            li( a( href:="#/Edition")("Edition"), onclick:=GlobalSheetState.dummyAction _),
+            li( a( href:="#/Affichage")("Affichage"), onclick:=GlobalSheetState.dummyAction _),
+            li( a( href:="#/Insertion")("Insertion"), onclick:=GlobalSheetState.dummyAction _),
+            li( a( href:="#/Format")("Format"), onclick:=GlobalSheetState.dummyAction _),
+            li( a( href:="#/Données")("Données"), onclick:=GlobalSheetState.dummyAction _),
+            li( a( href:="#/Aide")("Aide"), onclick:=GlobalSheetState.dummyAction _)
           )
         )
       ),

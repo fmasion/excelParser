@@ -13,7 +13,7 @@ final case class DateTime private (year: Int, // the year
                                    second: Int, // the second of the minute. The first second is 0.
                                    weekday: Int, // the day of the week. Sunday is 0.
                                    clicks: Long, // milliseconds since January 1, 1970, 00:00:00 GMT
-                                   isLeapYear: Boolean) extends Ordered[DateTime] {
+                                   isLeapYear: Boolean) {
   /**
    * The day of the week as a 3 letter abbreviation:
    * `Sun`, `Mon`, `Tue`, `Wed`, `Thu`, `Fri` or `Sat`
@@ -61,7 +61,7 @@ final case class DateTime private (year: Int, // the year
    */
   def toRfc1123DateTimeString = s"${weekdayStr}, ${day} ${monthStr} ${year} ${hour}:${minute}:${second} GMT"
 
-  def toDouble = (clicks + DateTime.millisTo1970) / (84500 * 1000)
+  def toDouble:Double = 1.0 * (clicks + DateTime.millisTo1970) / (84500 * 1000)
 
   def compare(that: DateTime): Int = math.signum(clicks - that.clicks).toInt
 
@@ -195,6 +195,9 @@ object DateTime {
    * Note that this implementation discards milliseconds (i.e. rounds down to full seconds).
    */
   def now: DateTime = apply(System.currentTimeMillis)
+
+
+  def fromDouble(double:Double): DateTime = apply{double.toLong * 84500 * 1000 - DateTime.millisTo1970}
 
   /**
    * Creates a new DateTime instance from the given String,

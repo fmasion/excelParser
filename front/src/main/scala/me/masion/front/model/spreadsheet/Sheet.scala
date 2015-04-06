@@ -14,7 +14,7 @@ import scala.util.{Failure, Success}
  */
 case class Sheet(internalGrid: Var[Map[CellRef, Cell]]= Var(Map.empty), internalRows: Var[Map[Int, Row]]= Var(Map.empty), internalColumns: Var[Map[Int, Column]]= Var(Map.empty)) {
 
-  def grid(cellRef: CellRef) = internalGrid().getOrElse(cellRef, EmptyCell)
+  def grid(cellRef: CellRef) = internalGrid().getOrElse(cellRef, Cell.DEFAULT)
   def row(i: Int) = internalRows().getOrElse(i, Row.default)
   def column(i: Int) = internalColumns().getOrElse(i, Column.default)
 
@@ -48,18 +48,11 @@ case class Sheet(internalGrid: Var[Map[CellRef, Cell]]= Var(Map.empty), internal
   }
 
   def update(cellRef:CellRef, input:String) = {
-    val parser = new FormulaParser(input)
-    val cell = parser.InputLine.run() match{
-      case Success(ast) => Cell(input, ast)
-      case Failure(b: ParseError) => {
-        val errorTip = parser.formatError(b)
-        Cell(input, Str(input), InvalidFormula(errorTip) )
-      }
-      case Failure(b: Throwable) => {
-        Cell(input, Str(input), ParseException(b.getMessage) )
-      }
+    grid(cellRef) match{
+      case Cell.DEFAULT => internalGrid() = internalGrid() + (cellRef -> Cell(Var(input)))
+      case cell => cell.input() =input
     }
-    internalGrid() = internalGrid() + (cellRef -> cell)
+
   }
 
 }
